@@ -3,6 +3,7 @@ import css from './App.module.css';
 import { Heading } from 'components/Heading/Heading';
 import { Book } from 'components/book/Book';
 import booksJson from './books.json';
+import BookForm from 'components/BookForm/BookForm';
 // import { findByTitle } from '@testing-library/react';
 
 const books = booksJson.books;
@@ -31,6 +32,23 @@ export class App extends Component {
       };
     });
   };
+  handleAddBook = bookData => {
+    console.log(bookData);
+    const hasBookDuplicate = this.state.appBooks.some(
+      book => book.title === bookData.title
+    );
+    //  if (this.state.appBooks.some(book => book.title === bookData.title))
+    if (hasBookDuplicate) {
+      alert(`Oops, book with title ${bookData.title} already exists`);
+      return;
+    }
+
+    this.setState(prevState => {
+      return {
+        appBooks: [bookData, ...prevState.appBooks],
+      };
+    });
+  };
   render() {
     return (
       <div>
@@ -41,6 +59,8 @@ export class App extends Component {
         <Heading className={css.headingApp1}>
           Delete books: {this.state.deliteCounter}
         </Heading>
+
+        <BookForm handleAddBook={this.handleAddBook} />
 
         <ul className={css.booksList}>
           {this.state.appBooks.map((book, index) => {
